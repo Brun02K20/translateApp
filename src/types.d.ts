@@ -19,3 +19,10 @@ export type Action =
 export type Language = keyof typeof SUPPORTED_LANGUAGES // Le digo que el tipo Language es una de las key, que esten en el objeto SUPPORTED_LANGUAGES
 export type AutoLanguage = typeof AUTO_LANGUAGE
 export type FromLanguage = Language | AutoLanguage
+
+// USO DE ENUMS:
+// enum es una forma de poder tener un diccionario en el que nos vamos a poder referir y va a ser constante
+export enum SectionType {
+    From = "from",
+    To = "to"
+}
