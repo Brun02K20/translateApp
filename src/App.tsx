@@ -1,6 +1,6 @@
-import './App.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import { type State, type Action } from './types.d';
+
+import './App.css'
 import { useStore } from './hooks/useStore';
 
 function App() {
