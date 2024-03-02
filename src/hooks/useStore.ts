@@ -1,5 +1,6 @@
 import { useReducer } from "react"
 import { FromLanguage, Language, type Action, type State } from "../types.d"
+import { AUTO_LANGUAGE } from "../constants"
 
 // Paso 1: crear un estado inicial
 // en el traductor de google, nosotros emos que tenemos 5 elementos fundamentales: el lenguaje origen,
@@ -24,6 +25,7 @@ const reducer = (state: State, action: Action) => {
 
     // intercambiar lenguajes
     if (type === "INTERCHANGE_LANGUAGES") {
+        if (state.fromLanguage === AUTO_LANGUAGE) return state
         return {
             ...state,
             fromLanguage: state.toLanguage,
