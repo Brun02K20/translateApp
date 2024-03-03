@@ -7,7 +7,7 @@ import { AUTO_LANGUAGE } from "../constants"
 // el lenguaje destino, el texto que ingresa el usuario, el texto traducido, y el estado de traduciendo.....
 const initialstate: State = {
     fromLanguage: "auto",
-    toLanguage: "en",
+    toLanguage: "en-US",
     fromText: "",
     result: "",
     loading: false
@@ -35,25 +35,34 @@ const reducer = (state: State, action: Action) => {
 
     // setear el lenguaje origen
     if (type === "SET_FROM_LANGUAGE") {
+        if (state.fromLanguage === action.payload) return state
+        const loading = state.fromText !== ""
         return {
             ...state,
-            fromLanguage: action.payload
+            fromLanguage: action.payload,
+            result: "",
+            loading
         }
     }
 
     // setear el lenguaje destino
     if (type === "SET_TO_LANGUAGE") {
+        if (state.fromLanguage === action.payload) return state
+        const loading = state.fromText !== ""
         return {
             ...state,
-            toLanguage: action.payload
+            toLanguage: action.payload,
+            result: "",
+            loading
         }
     }
 
     // setear texto origen
     if (type === "SET_FROM_TEXT") {
+        const loading = action.payload !== ""
         return {
             ...state,
-            loading: true,
+            loading,
             fromText: action.payload,
             result: ""
         }

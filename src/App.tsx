@@ -7,6 +7,7 @@ import { ArrowsIcon } from './components/Icons';
 import { LanguageSelect } from './components/LanguageSelect';
 import { SectionType } from './types.d';
 import { TextArea } from './components/TextArea';
+import { useEffect } from 'react';
 
 function App() {
   const {
@@ -14,12 +15,31 @@ function App() {
     toLanguage, 
     fromText,
     result, 
+    loading,
     interchangeLanguages, 
     setFromLanguage, 
     setToLanguage,
     setFromText,
     setResult
   } = useStore()
+
+  useEffect(() => {
+    if (fromText === '') return 
+    fetch(`http://localhost:3000/api/translate/${fromLanguage}/${toLanguage}/${fromText}`)
+      .then(r => {
+        console.log(r)
+        if (!r.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return r.text();
+      })
+      .then(text => {
+        setResult(text);
+      })
+      .catch(() => setResult("Error"))
+
+  }, [fromText, fromLanguage, toLanguage])
+
   return (
       <Container fluid>
         <h2>Google translate</h2>
@@ -33,7 +53,6 @@ function App() {
               />
               <TextArea 
                 type={SectionType.From}
-                placeholder='Ingresar texto'
                 value={fromText}
                 onChange={setFromText}
               />
@@ -53,9 +72,9 @@ function App() {
               />
               <TextArea 
                 type={SectionType.To}
-                placeholder='Traducción'
                 value={result}
                 onChange={setResult}
+                loading={loading}
               />
             </Stack>
           </Col>
