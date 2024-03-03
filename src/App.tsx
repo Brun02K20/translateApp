@@ -28,7 +28,7 @@ function App() {
 
   useEffect(() => {
     if (debouncedFromText === '') return 
-    fetch(`http://localhost:3000/api/translate/${fromLanguage}/${toLanguage}/${debouncedFromText}`)
+    fetch(`https://translateappbackend.onrender.com/api/translate/${fromLanguage}/${toLanguage}/${debouncedFromText}`)
       .then(r => {
         console.log(r)
         if (!r.ok) {
