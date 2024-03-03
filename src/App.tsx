@@ -3,11 +3,12 @@ import { Container, Row, Col, Button, Stack } from 'react-bootstrap';
 import './App.css'
 import { useStore } from './hooks/useStore';
 import { AUTO_LANGUAGE } from './constants';
-import { ArrowsIcon } from './components/Icons';
+import { ArrowsIcon, ClipboardIcon, SpeakerIcon } from './components/Icons';
 import { LanguageSelect } from './components/LanguageSelect';
 import { SectionType } from './types.d';
 import { TextArea } from './components/TextArea';
 import { useEffect } from 'react';
+import { useDebounce } from './hooks/useDebounce';
 
 function App() {
   const {
@@ -23,9 +24,11 @@ function App() {
     setResult
   } = useStore()
 
+  const debouncedFromText = useDebounce(fromText)
+
   useEffect(() => {
-    if (fromText === '') return 
-    fetch(`http://localhost:3000/api/translate/${fromLanguage}/${toLanguage}/${fromText}`)
+    if (debouncedFromText === '') return 
+    fetch(`http://localhost:3000/api/translate/${fromLanguage}/${toLanguage}/${debouncedFromText}`)
       .then(r => {
         console.log(r)
         if (!r.ok) {
@@ -38,7 +41,18 @@ function App() {
       })
       .catch(() => setResult("Error"))
 
-  }, [fromText, fromLanguage, toLanguage])
+  }, [debouncedFromText, fromLanguage, toLanguage])
+
+  const handleClipboard = () => {
+    navigator.clipboard.writeText(result).catch(() => {})
+  }
+
+  const handleSpeak = () => {
+    const utterance = new SpeechSynthesisUtterance(result)
+    utterance.lang = toLanguage
+    utterance.rate = 0.9
+    speechSynthesis.speak(utterance)
+  }
 
   return (
       <Container fluid>
@@ -66,16 +80,34 @@ function App() {
           <Col>
             <Stack gap={2}>
               <LanguageSelect 
-              type={SectionType.To}
-              value={toLanguage}
-              onChange={setToLanguage}
-              />
-              <TextArea 
                 type={SectionType.To}
-                value={result}
-                onChange={setResult}
-                loading={loading}
+                value={toLanguage}
+                onChange={setToLanguage}
               />
+              <div style={{position: 'relative'}}>
+                <TextArea 
+                  type={SectionType.To}
+                  value={result}
+                  onChange={setResult}
+                  loading={loading}
+                />
+                <div style={{position: 'absolute', left: 0, bottom: 0, display: 'flex'}}>
+                  <Button 
+                    variant='link' 
+                    onClick={handleClipboard}
+                  >
+                    <ClipboardIcon />
+                  </Button>
+                  <Button 
+                    variant='link' 
+                    onClick={handleSpeak}
+                  >
+                    <SpeakerIcon />
+                  </Button>
+                </div>
+                
+              </div>
+              
             </Stack>
           </Col>
         </Row>
