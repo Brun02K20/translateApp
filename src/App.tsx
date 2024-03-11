@@ -27,9 +27,16 @@ function App() {
   const debouncedFromText = useDebounce(fromText)
 
   useEffect(() => {
+    console.log("FL: ", fromLanguage)
+    console.log("TL: ", toLanguage);
+    
+  }, [fromLanguage, toLanguage])
+
+  useEffect(() => {
     if (debouncedFromText === '') return 
     fetch(`https://translateappbackend.onrender.com/api/translate/${fromLanguage}/${toLanguage}/${debouncedFromText}`)
-      .then(r => {
+    // fetch(`http://localhost:3000/api/translate/${fromLanguage}/${toLanguage}/${debouncedFromText}`)
+    .then(r => {
         console.log(r)
         if (!r.ok) {
           throw new Error('Network response was not ok');

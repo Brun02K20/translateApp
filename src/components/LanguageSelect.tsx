@@ -26,7 +26,7 @@ export const LanguageSelect: FC<Props>= ({onChange, type, value}) => {
             {/* aca lo que hago es que del objeto SUPPORTED_LANGUAGES, lo paso a un array de objetos,
             donde key, vendrian a ser las claves del objeto, y los literales el valor de esas llaves */}
             {Object.entries(SUPPORTED_LANGUAGES).map(([key, literal]) => (
-                <option key={key} value={key}>
+                <option key={key} value={type === SectionType.From && key === "en-US" ? "en" : key}>
                     {literal}
                 </option>
             ))}

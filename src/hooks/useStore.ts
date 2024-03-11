@@ -31,8 +31,8 @@ const reducer = (state: State, action: Action) => {
             fromText: state.result,
             loading,
             result: '',
-            fromLanguage: state.toLanguage,
-            toLanguage: state.fromLanguage
+            fromLanguage: state.toLanguage !== "en-US" ? state.toLanguage : "en" as FromLanguage,
+            toLanguage: !state.fromLanguage.includes("en") ? state.fromLanguage : "en-US" as Language
         }
     }
 
