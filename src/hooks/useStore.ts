@@ -28,7 +28,7 @@ const reducer = (state: State, action: Action) => {
         if (state.fromLanguage === AUTO_LANGUAGE) return state
         const loading = state.fromText !== ""
         return {
-            ...state,
+            fromText: state.result,
             loading,
             result: '',
             fromLanguage: state.toLanguage,

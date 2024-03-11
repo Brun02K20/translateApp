@@ -37,7 +37,9 @@ function App() {
         return r.text();
       })
       .then(text => {
-        setResult(text);
+        const parsedText = JSON.parse(text); // Convertir texto JSON a objeto JavaScript
+        const decodedText = parsedText.replace(/^"(.*)"$/, '$1'); // Eliminar comillas escapadas
+        setResult(decodedText); // Establecer el resultado decodificado
       })
       .catch(() => setResult("Error"))
 
